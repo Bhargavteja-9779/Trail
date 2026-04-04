@@ -1,0 +1,8 @@
+faster-whisper
+sounddevice
+numpy
+rapidfuzz
+silero-vad
+torch
+torchaudio
+requests
