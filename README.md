@@ -31,8 +31,14 @@ Shabda AI is built as a highly modular pipeline capturing speech and translating
 
 ### 🍎 macOS Setup (Apple Silicon M1/M2/M3 & Intel)
 
-1. **Install Dependencies:**
+1. **Create and Activate a Virtual Environment:**
    Open your terminal and run:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+2. **Install Dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
@@ -53,13 +59,19 @@ Shabda AI is built as a highly modular pipeline capturing speech and translating
 
 ### 🪟 Windows Setup (CPU & NVIDIA GPU)
 
-1. **Install Dependencies:**
+1. **Create and Activate a Virtual Environment:**
    Open Command Prompt or PowerShell and run:
+   ```cmd
+   python -m venv venv
+   .\venv\Scripts\activate
+   ```
+
+2. **Install Dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
    
-2. **NVIDIA GPU Acceleration (CUDA) - Optional but highly recommended:**
+3. **NVIDIA GPU Acceleration (CUDA) - Optional but highly recommended:**
    If you have an NVIDIA GPU, Shabda AI will automatically utilize CUDA via Faster-Whisper to run large models instantly. For this to work perfectly on Windows, make sure you install PyTorch with CUDA support. Run this command:
    ```bash
    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
