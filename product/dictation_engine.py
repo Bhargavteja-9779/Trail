@@ -139,8 +139,21 @@ class DictationEngine:
             return
 
         try:
-            # For Windows/Linux, type via pynput instantly without individual loops
-            kb.type(text)
+            # For Windows/Linux, type via pynput instantly but with a microscopic 
+            # delay between characters. If it types too fast (kb.type(text)), 
+            # Windows apps like Notepad will drop/swallow characters.
+            for char in text:
+                if self._stop_event.is_set():
+                    break
+                try:
+                    kb.press(char)
+                    kb.release(char)
+                except Exception as char_err:
+                    log.debug("DictationEngine: char type error '%s': %s", char, char_err)
+                    continue
+                
+                # 1ms to 2ms microscopic delay to avoid overwhelming the OS buffer
+                time.sleep(0.002)
         except Exception as exc:
             log.error("DictationEngine: typing error: %s", exc)
 
