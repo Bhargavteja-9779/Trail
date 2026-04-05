@@ -1,0 +1,7 @@
+{
+  "dictation": true,
+  "model": "small.en",
+  "mic": "default",
+  "latency_mode": "balanced",
+  "debug": false
+}

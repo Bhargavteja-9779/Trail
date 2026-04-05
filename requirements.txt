@@ -6,3 +6,6 @@ silero-vad
 torch
 torchaudio
 requests
+rich
+PyQt6
+pynput

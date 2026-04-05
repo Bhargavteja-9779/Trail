@@ -1,102 +1,130 @@
-# Shabda AI — Core Speech-To-Text Engine
+# Shabda AI — Local Dictation Assistant
 
-An ultra-low latency, exceptionally accurate, cross-platform, strictly offline Speech-To-Text engine.
-
-Engineered natively with heavy tensor-quantization, dynamic sliding-window audio buffering, and zero-hallucination guardrails, this project is built to perfectly mimic the "Live Dictation" features of MS Word and Google Translate using local AI.
-
----
-
-## 🚀 Features
-
-- **Zero API Keys Required:** Runs entirely locally/offline on your machine keeping your data natively secure.
-- **Cross-Platform Auto-Detection:** Automatically optimizes for Mac (Apple Silicon) or Windows (NVIDIA CUDA / CPU).
-- **Interactive UI Menu:** Launch effortlessly without relying on complex terminal flags.
-- **Live Streaming Dictation:** Your words magically appear and update dynamically natively as you speak, seamlessly flowing into structured paragraphs.
-- **Keyword Correction Engine:** Pre-loaded with RapidFuzz mathematically scanning for specific jargon (e.g., PySpark, Databricks). Any structural mistakes the AI makes on domain-specific vocabulary are instantly fixed.
-- **Hallucination Prevention:** Hardcoded logic filters and context locks explicitly ban the AI from guessing or writing ghost words or foreign languages when the room is silent.
+> A fully offline, cross-platform, real-time speech-to-text dictation engine.
+> Works flawlessly on **macOS (Intel + Apple Silicon)** and **Windows (CPU + NVIDIA GPU)**.
+> Highly optimized for ultra-low latency typing across all operating systems.
 
 ---
 
-## 🛠️ Installation & Setup
+## 🌟 Perfect Cross-Platform Version
+This project has been heavily calibrated to work out of the box on both Mac and Windows without any code changes. 
+- **macOS Latency Optimized:** Uses a persistent `osascript` process to enable instant, zero-latency dictation directly into any Mac app without the usual `subprocess` startup delays or threading crashes.
+- **Windows Latency Optimized:** Uses `pynput` with native string buffering to type text instantly into Windows applications, removing the slow character-by-character artificial typing delays.
 
-### For Mac (Apple Silicon: M1 / M2 / M3)
-Mac systems will strictly bypass the GPU and use your CPU with `int8` (8-bit mathematically quantized) acceleration natively optimizing matrix math without draining battery levels.
+---
 
-1. **Clone the project and open the terminal inside the folder.**
-2. **Setup a virtual environment (Recommended):**
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-3. **Install Dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+## 🛠️ How It Works (The Engine Pipeline)
 
-### For Windows (NVIDIA GPU Recommended)
-Windows natively supports CUDA graphic card tensor mapping. Because of this, Windows users can mathematically achieve a staggering 10x-15x transcription speed increase by routing audio logic directly into their Graphics Card!
+Shabda AI is built as a highly modular pipeline capturing speech and translating it into keyboard strokes in any app:
 
-1. **Clone the project and open PowerShell / Command Prompt inside the folder.**
-2. **Setup a virtual environment:**
-   ```bash
-   python -m venv venv
-   venv\Scripts\activate
-   ```
-3. **Install Main Dependencies:**
+1. **Audio Capture (`sounddevice`):** Captures high-fidelity 16kHz audio directly from your selected microphone.
+2. **Voice Activity Detection (`Silero VAD`):** Instantly detects speech versus silence to separate continuous background noise from your actual voice.
+3. **Rolling Buffer:** Safely accumulates spoken words until a natural pause is detected.
+4. **Neural Inference (`Faster-Whisper`):** Processes the audio payload instantly, yielding highly accurate text. It uses CPU (int8) natively on Mac, and can leverage NVIDIA CUDA on Windows automatically.
+5. **Transcript Manager:** Curates the raw transcribed chunks into a polished, coherent paragraph.
+6. **Dictation Engine:** Automatically detects your OS (macOS or Windows) and dynamically injects the text via native OS typing commands into *whichever app currently has focus* (e.g., your browser, Word document, or code editor).
+7. **Floating UI:** Provides a neat, draggable microphone overlay that stays on top of all windows without ever stealing your typing focus.
+
+---
+
+## 🚀 Detailed Installation & Setup Instructions
+
+### 🍎 macOS Setup (Apple Silicon M1/M2/M3 & Intel)
+
+1. **Install Dependencies:**
+   Open your terminal and run:
    ```bash
    pip install -r requirements.txt
    ```
-4. **Link Python to your NVIDIA Driver (Crucial for GPU Acceleration):**
-   Run the following command to securely bind the underlying Neural Networks directly into Windows CUDA cores.
+   *(Note: macOS comes with all the necessary system typing tools (`osascript`); no extra system libraries are needed!)*
+
+2. **Grant Permissions (Crucial for Mac):**
+   The first time you run Shabda AI, macOS will block it from typing onto your screen for security reasons. You MUST grant the following:
+   - Go to **System Settings** → **Privacy & Security** → **Accessibility**
+   - Click the `+` button and add your `Terminal` app, `iTerm`, or the specific `python` executable you are using.
+   - Go to **System Settings** → **Privacy & Security** → **Automation**
+   - Allow `System Events` under your terminal or Python executable.
+   *(If you skip this, it will listen, but it won't type anything into your documents!)*
+
+3. **Run the App:**
    ```bash
-   pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+   python main.py
    ```
-   *(If you do not have an NVIDIA GPU, skip step 4. Shabda AI will automatically self-recognize this and fall back to running securely on your CPU).*
+
+### 🪟 Windows Setup (CPU & NVIDIA GPU)
+
+1. **Install Dependencies:**
+   Open Command Prompt or PowerShell and run:
+   ```bash
+   pip install -r requirements.txt
+   ```
+   
+2. **NVIDIA GPU Acceleration (CUDA) - Optional but highly recommended:**
+   If you have an NVIDIA GPU, Shabda AI will automatically utilize CUDA via Faster-Whisper to run large models instantly. For this to work perfectly on Windows, make sure you install PyTorch with CUDA support. Run this command:
+   ```bash
+   pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+   ```
+   *(This ensures you have all the necessary NVIDIA GPU libraries available for the AI engine).*
+
+3. **Permissions (Optional):**
+   - Generally, Windows allows `pynput` to type into apps seamlessly.
+   - However, if you are trying to dictate into an application running as Administrator (e.g., Task Manager or certain IDEs), you must also run the Terminal/Command Prompt running Shabda AI as Administrator.
+
+4. **Run the App:**
+   ```bash
+   python main.py
+   ```
 
 ---
 
-## 💻 How To Run
+## 🎯 How to Use It
 
-You no longer need to edit any Python code manually! Simply execute the application directly:
+Once you run `python main.py`, a small **circular floating microphone overlay** will appear on the bottom right of your screen. 
 
-```bash
-python main.py
-```
+### 🖱️ Overlay Controls
 
-Upon launching, a beautifully rendered **Interactive Menu** will appear asking you to specify your engine's physical size restraint. Type a number `[1-5]` and hit enter!
+| Gesture | Action |
+|---|---|
+| **Left Click** | Start/Stop Listening (Turns red when listening, green when processing). |
+| **Double Click** | Toggle **Dictation Mode** on/off (A small "D" badge appears). |
+| **Right Click** | Open the hidden **Settings Window** for advanced controls. |
+| **Click & Drag**| Move the tiny microphone window anywhere on your screen. |
 
-> **Note on Initial Boot:** The extremely first time you select a model size, the engine will halt momentarily to securely download its neural weights into your hidden cache. *Subsequent launches skip this entirely and boot instantly.*
+### 🎙️ Using Dictation Mode
 
-### Understanding the Model Array:
-- `[1]` **tiny.en (~100MB)**: Utterly instantaneous latency. Recommended strictly for highly power-constrained generic laptops.
-- `[2]` **base.en (~145MB)**: Strong minimal-tier transcription baseline.
-- `[3]` **small.en (~480MB)**: **The Goldilocks Model**. Perfectly balances native CPU hardware throughput with heavily reinforced grammar tracking. Highly recommended for Mac architecture.
-- `[4]` **medium.en (~1.5GB)**: Exceptional native English accuracy. This model physically demands a highly capable modern processor or ideally an Nvidia GPU.
-- `[5]` **large-v3 (~3.0GB)**: Flawless human-tier studio grammar level. Because of its sheer monolithic file weight, this is strictly recommended for Windows systems equipped with discrete NVIDIA Graphics Cards. 
+1. **Enable Dictation:** Double-click the microphone so the "D" badge appears.
+2. **Focus an Application:** Click on ANY text field in ANY application (Chrome, MS Word, VS Code, Notes, etc.).
+3. **Start Talking:** Click the microphone once (turns red) and start talking.
+4. **Watch it Type:** Stop talking for a split second, and Shabda AI will instantly type the generated text directly into the application you are currently focused on, with exactly zero typing delay!
 
-*(For advanced automation logic, you can easily bypass the menu natively by triggering the flags via terminal):*
-```bash
-python main.py --model small.en
-```
+> **Pro Tip:** Shabda AI only injects the NEW text since the last pause. It assumes an "append-only" flow.
 
 ---
 
-## 📝 Editing the Keywords Dictionary
-If Shabda AI fails to transcribe highly complex industry vocabulary correctly (e.g. `Databricks`, `Z-Ordering`, etc) because it is outside general baseline knowledge, simply open `keywords.json` in any text editor. 
+## ⚙️ Advanced Settings (Settings Window)
 
-You can freely append as many thousands of required words into the JSON array as you wish. 
+Right-click the overlay to access the settings panel:
 
-The next time you boot `main.py`, the RapidFuzz engine will immediately load and perfectly memorize them!
+- **General:** Change the Neural Engine model (tinier models are faster but less accurate, `medium.en` is great for Apple Silicon, `large-v3` is incredible if you have an NVIDIA GPU).
+- **Microphone:** Choose the correct physical microphone you want the engine to listen to.
+- **Keywords:** Add a list of contextually relevant words! If you often code, add `PyTorch, FastAPI, asyncio`. The Engine will hot-reload them and dramatically prioritize spelling those words correctly!
+- **Transcript:** A raw view of everything dictated in the session.
 
 ---
 
-## 🧠 Under The Hood (Architecture)
+## 🧠 Neural Models auto-downloaded
 
-If you are a developer intending to modify Shabda AI, here is a functional overview of the pipeline workflow logic:
+Models download automatically to the `models/` folder on first use.
 
-1. **`audio_engine.py`:** Seamlessly captures native audio chunks directly avoiding OS level bottlenecks using `sounddevice`.
-2. **`vad_engine.py` (Voice Activity Detector):** A proprietary sub-model (Silero) constantly scanning your microphone locally in 32ms frames. It explicitly drops dead static and routes only genuine human frequencies mathematically over a `0.3` probability-index.
-3. **`buffer_engine.py`:** An asynchronous mechanism conceptually combining those scattered voice frames into continually overlapping sentence arrays. This stops the Whisper AI from brutally severing your sentences mid-word.
-4. **`inference_engine.py`:** Natively binds to CTranslate2 Faster-Whisper. Dynamically overrides and crushes *hallucinations* (forcing greedy translation math and explicitly preventing YouTube-subtitling loop leaks). 
-5. **`post_engine.py`:** Executes local Regex formatting limits and uses RapidFuzz mathematically to intelligently assess specific technical domain language distances from your `keywords.json` array.
-6. **`main.py`:** Renders the CLI user experience, mapping dynamic carriage returns and `rich.Live` panels to make the output update intelligently based on live asynchronous context queues.
+| Model | Size | Best For |
+|---|---|---|
+| `tiny.en` | ~100 MB | Fastest, extremely low memory |
+| `base.en` | ~145 MB | Fast, decent baseline |
+| `small.en` | ~480 MB | Balanced (best for typical CPU usage) |
+| `medium.en` | ~1.5 GB | Highly accurate (Default) |
+| `large-v3` | ~3.0 GB | Max accuracy (Best with NVIDIA GPU) |
+
+---
+
+## 📜 License
+MIT — completely offline, fully private, zero cloud APIs, zero telemetry.
