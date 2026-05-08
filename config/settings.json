@@ -1,6 +1,6 @@
 {
   "dictation": true,
-  "model": "small.en",
+  "model": "medium.en",
   "mic": "default",
   "latency_mode": "balanced",
   "debug": false

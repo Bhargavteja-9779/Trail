@@ -1,9 +1,100 @@
+# =============================================================================
+# Shabda AI — .gitignore
+# =============================================================================
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.pyo
+
+# ── Virtual Environments ──────────────────────────────────────────────────────
 venv/
 env/
-__pycache__/
-*.pyc
-.DS_Store
+.venv/
+.env/
+ENV/
+env.bak/
+venv.bak/
+
+# ── Environment Variables / Secrets ──────────────────────────────────────────
 .env
+.env.*
+!.env.example
+*.secret
+secrets.json
+credentials.json
+
+# ── AI Model Weights (large binary files — downloaded at runtime) ─────────────
+models/
+*.bin
+*.pt
+*.pth
+*.gguf
+*.onnx
+*.safetensors
+
+# ── macOS System Files ────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ── IDE / Editor ──────────────────────────────────────────────────────────────
 .idea/
 .vscode/
-models/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# ── Logs & Temporary Files ────────────────────────────────────────────────────
+*.log
+*.tmp
+*.temp
+logs/
+log/
+
+# ── Build / Distribution ──────────────────────────────────────────────────────
+dist/
+build/
+*.egg-info/
+*.egg
+.eggs/
+MANIFEST
+site/
+
+# ── Testing & Coverage ────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.coveragerc
+nosetests.xml
+
+# ── Jupyter Notebooks ─────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── PyInstaller Packaging ─────────────────────────────────────────────────────
+*.spec
+*.manifest
+
+# ── Legacy / Archive Code ─────────────────────────────────────────────────────
+_legacy/
+
+# ── HuggingFace Cache ─────────────────────────────────────────────────────────
+.cache/
+huggingface/
+
+# ── Mypy / Type Checkers ──────────────────────────────────────────────────────
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
