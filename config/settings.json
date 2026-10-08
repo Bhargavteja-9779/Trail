@@ -1,7 +1,0 @@
-{
-  "dictation": true,
-  "model": "medium.en",
-  "mic": "default",
-  "latency_mode": "balanced",
-  "debug": false
-}
